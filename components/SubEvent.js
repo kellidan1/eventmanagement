@@ -27,10 +27,18 @@ export default function SubEvent() {
                             setSubEvents(updatedSubEvents);
                         }}
                     />
-                    <Button
-                        title="Remove"
-                        onPress={() => handleRemoveSubEvent(subEvent.id)}
-                    />
+                    <View style={styles.buttonContainer}>
+                        <Button
+                            title="Submit"
+                            onPress={() => console.log('Submitting event:', subEvent.id)}
+                        />
+                    </View>
+                    <View style={styles.buttonContainer}>
+                        <Button
+                            title="Remove"
+                            onPress={() => handleRemoveSubEvent(subEvent.id)}
+                        />
+                    </View>
                 </View>
             ))}
             <Button title="Add SubEvent" onPress={handleAddSubEvent} />
@@ -45,6 +53,9 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         paddingHorizontal: 20,
+    },
+    buttonContainer: {
+        marginHorizontal: 5, // Add space between buttons
     },
     subEventItem: {
         flexDirection: 'row',
