@@ -16,7 +16,7 @@ export default function Event() {
     const handleCreateEvent = () => {
         // Handle event creation logic here
         console.log('Creating event:', name, description, startTime, endTime);
-        navigation.navigate('subevent')
+        navigation.navigate('Sub Events')
     };
     const venues = [
         { label: 'Venue 1', value: 'venue1' },

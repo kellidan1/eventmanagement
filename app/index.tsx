@@ -4,6 +4,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import NewEvent from '../components/Event';
 import SubEvent from '../components/SubEvent';
+import DisplayEvent from '../components/Displayevent';
 
 const Stack = createStackNavigator();
 
@@ -13,7 +14,8 @@ export default function App() {
       <Stack.Navigator>
         <Stack.Screen name="Event Management App" component={HomeScreen} />
         <Stack.Screen name="Event" component={NewEvent} />
-        <Stack.Screen name="subevent" component={SubEvent} />
+        <Stack.Screen name="Sub Events" component={SubEvent} />
+        <Stack.Screen name="Display event" component={DisplayEvent} />
       </Stack.Navigator>
     </NavigationContainer>
   );
@@ -22,7 +24,10 @@ export default function App() {
 function HomeScreen({ navigation }: { navigation: any }) {
   return (
     <View style={styles.container}>
-      <Button title="Create New Event" onPress={() => navigation.navigate('Event')} />
+      <View style={styles.buttonContainer}>
+        <Button title="Create New Event" onPress={() => navigation.navigate('Event')} />
+        <Button title="View Events" onPress={() => navigation.navigate('Display event')} />
+      </View>
     </View>
   );
 }
@@ -33,9 +38,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
+  buttonContainer: {
+    flexDirection: 'column',
+    justifyContent: 'center',
+    width: '80%',
     marginBottom: 16,
+    gap: 16,
   },
 });
