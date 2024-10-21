@@ -1,15 +1,19 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TextInput, Button } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
 export default function SubEvent() {
     const [subEvents, setSubEvents] = useState([]);
-
+    const navigation = useNavigation();
     const handleAddSubEvent = () => {
         setSubEvents([...subEvents, { id: subEvents.length + 1, name: '' }]);
     };
 
     const handleRemoveSubEvent = (index) => {
         setSubEvents(subEvents.filter((subEvent) => subEvent.id !== index));
+    };
+    const handlePressEvent = () => {
+        navigation.navigate('Display event');
     };
 
     return (
@@ -42,6 +46,7 @@ export default function SubEvent() {
                 </View>
             ))}
             <Button title="Add SubEvent" onPress={handleAddSubEvent} />
+            <Button title="Save And Return" onPress={handlePressEvent} />
         </View>
     );
 }
@@ -52,7 +57,8 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
         alignItems: 'center',
         justifyContent: 'center',
-        paddingHorizontal: 20,
+        paddingHorizontal: "20%",
+        gap: 10,
     },
     buttonContainer: {
         marginHorizontal: 5, // Add space between buttons

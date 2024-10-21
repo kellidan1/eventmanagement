@@ -5,6 +5,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import NewEvent from '../components/Event';
 import SubEvent from '../components/SubEvent';
 import DisplayEvent from '../components/Displayevent';
+import EventDetails from '../components/Eventdetails';
 
 const Stack = createStackNavigator();
 
@@ -16,6 +17,7 @@ export default function App() {
         <Stack.Screen name="Event" component={NewEvent} />
         <Stack.Screen name="Sub Events" component={SubEvent} />
         <Stack.Screen name="Display event" component={DisplayEvent} />
+        <Stack.Screen name="Event Details" component={EventDetails} />
       </Stack.Navigator>
     </NavigationContainer>
   );

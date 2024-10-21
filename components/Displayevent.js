@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, FlatList, Image } from 'react-native';
+import { View, Text, StyleSheet, FlatList, Image, TouchableOpacity } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
+import { useNavigation } from '@react-navigation/native';
 const imageSource = require('../assets/images/icon.png');
 
 export default function DisplayEvent() {
     const [numEvents, setNumEvents] = useState(0);
     const [events, setEvents] = useState([]);
+    const navigation = useNavigation();
 
     const handleNumEventsChange = (value) => {
         setNumEvents(parseInt(value));
@@ -19,14 +21,17 @@ export default function DisplayEvent() {
         }
         return events;
     };
-
+    const handlePressEvent = (eventId) => {
+        // Handle navigation to DisplayEventDetails page here
+        console.log('Event pressed:', eventId); // Replace with navigation logic
+        navigation.navigate('Event Details');
+    };
     return (
         <View style={styles.container}>
             <Picker
                 selectedValue={numEvents}
                 onValueChange={handleNumEventsChange}
-                style={styles.picker}
-            >
+                style={styles.picker}>
                 <Picker.Item label="Select Number of Events" value={0} />
                 {Array.from({ length: 100 }, (_, i) => i + 1).map((num) => (
                     <Picker.Item key={num} label={num.toString()} value={num} />
@@ -36,12 +41,14 @@ export default function DisplayEvent() {
                 <FlatList
                     data={events}
                     renderItem={({ item }) => (
-                        <View style={styles.eventTile}>
-                            {/* <Image source={{ uri: item.imageUrl }} style={styles.eventImage} /> */}
-                            <Image source={imageSource} style={styles.eventImage} />
-                            <Text style={styles.eventTitle}>{item.name}</Text>
-                            <Text style={styles.eventDescription}>{item.description}</Text>
-                        </View>
+                        <TouchableOpacity onPress={() => handlePressEvent(item.id)}>
+                            <View style={styles.eventTile}>
+                                {/* <Image source={{ uri: item.imageUrl }} style={styles.eventImage} /> */}
+                                <Image source={imageSource} style={styles.eventImage} />
+                                <Text style={styles.eventTitle}>{item.name}</Text>
+                                <Text style={styles.eventDescription}>{item.description}</Text>
+                            </View>
+                        </TouchableOpacity>
                     )}
                     keyExtractor={(item) => item.id}
                     style={styles.flatList}
@@ -84,14 +91,14 @@ const styles = StyleSheet.create({
         borderRadius: 5,
         marginBottom: 8,
     },
-    // flatList: {
-    //     flex: 1, // Occupy the remaining space
-    //     width: '100%', // Occupy full width
-    //     maxHeight: 300, // Adjust the maximum height as needed
-    //     paddingHorizontal: 16, // Add padding to sides
-    // },
-    // flatListContainer: {
-    //     maxHeight: '80%', // Adjust maximum height as needed
-    // },
+    flatList: {
+        flex: 1, // Occupy the remaining space
+        width: '100%', // Occupy full width
+        //     maxHeight: 300, // Adjust the maximum height as needed
+        //     paddingHorizontal: 16, // Add padding to sides
+        // },
+        // flatListContainer: {
+        //     maxHeight: '80%', // Adjust maximum height as needed
+    },
 
 });
