@@ -6,6 +6,8 @@ import NewEvent from '../components/Event';
 import SubEvent from '../components/SubEvent';
 import DisplayEvent from '../components/Displayevent';
 import EventDetails from '../components/Eventdetails';
+import Venue from '../components/Venue';
+import AddVenue from '../components/Addvenue';
 
 const Stack = createStackNavigator();
 
@@ -18,6 +20,8 @@ export default function App() {
         <Stack.Screen name="Sub Events" component={SubEvent} />
         <Stack.Screen name="Display event" component={DisplayEvent} />
         <Stack.Screen name="Event Details" component={EventDetails} />
+        <Stack.Screen name="Venue Details" component={Venue} />
+        <Stack.Screen name="Add Venue" component={AddVenue} />
       </Stack.Navigator>
     </NavigationContainer>
   );
@@ -29,6 +33,7 @@ function HomeScreen({ navigation }: { navigation: any }) {
       <View style={styles.buttonContainer}>
         <Button title="Create New Event" onPress={() => navigation.navigate('Event')} />
         <Button title="View Events" onPress={() => navigation.navigate('Display event')} />
+        <Button title="Venues" onPress={() => navigation.navigate('Venue Details')} />
       </View>
     </View>
   );

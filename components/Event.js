@@ -1,28 +1,75 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, StyleSheet, TextInput, Button, Image } from 'react-native';
 import SubEvent from '../components/SubEvent';
 import { useNavigation } from '@react-navigation/native';
 import { Picker } from '@react-native-picker/picker';
-const imageSource = require('../assets/images/icon.png'); // Replace with your image path
+import DateTimePicker from '@react-native-community/datetimepicker';
+const imageSource = require('../assets/images/icon.png'); // change it so user has option to click and choose their own image
 
 export default function Event() {
     const navigation = useNavigation();
     const [name, setName] = useState('');
     const [description, setDescription] = useState('');
-    const [startTime, setStartTime] = useState('');
-    const [endTime, setEndTime] = useState('');
-    const [selectedVenue, setSelectedVenue] = useState('');
+    const [startTime, setStartTime] = useState(new Date());
+    const [endTime, setEndTime] = useState(new Date());
+    const [selectedVenue, setSelectedVenue] = useState({
+        id: '',
+        name: '',
+        location: '',
+        capacity: 0
+    });
+
+    const [venueList, setVenueList] = useState([]);
+    const [showStartTime, setShowStartTime] = useState(false);
+    const [showEndTime, setShowEndTime] = useState(false);
+
+
+    // load the venues
+    useEffect(() => {
+        fetch("https://event-management-backend-974j.onrender.com/venues")
+            .then((res) => res.json())
+            .then((venues) => {
+                let temp = []
+                temp.push({ id: "000", name: "Select Venue" }) // empty item
+                venues.forEach((venue) => {
+                    temp.push({ id: venue._id, name: venue.name, location: venue.location, capacity: venue.capacity })
+                })
+                console.log(temp)
+                setVenueList(temp);
+            })
+            .catch(err => { console.error(err) })
+    }, [])
+
+
 
     const handleCreateEvent = () => {
-        // Handle event creation logic here
-        console.log('Creating event:', name, description, startTime, endTime);
+        console.log('Creating event:', name, description, startTime, endTime); //replace this with inserting into database logic
         navigation.navigate('Sub Events')
+
+
+        fetch("https://event-management-backend-974j.onrender.com/event", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json", // Specify the content type
+            },
+            body: JSON.stringify({
+                name,
+                description,
+                timings: {
+                    startTime,
+                    endTime
+                },
+                venue: {
+                    name: selectedVenue.name,
+                    location: selectedVenue.location,
+                    capacity: selectedVenue.capacity
+                },
+                subevents: []
+            })
+        })
+            .then(res => { console.log(res); navigation.navigate('Event Management App') })
+            .catch(err => console.error(err))
     };
-    const venues = [
-        { label: 'Venue 1', value: 'venue1' },
-        { label: 'Venue 2', value: 'venue2' },
-        // Add more venues as needed
-    ];
 
     return (
         <View style={styles.event}>
@@ -39,26 +86,41 @@ export default function Event() {
                 value={description}
                 onChangeText={setDescription}
             />
-            <TextInput
-                style={styles.input}
-                placeholder="Start Time"
-                value={startTime}
-                onChangeText={setStartTime}
-            />
-            <TextInput
-                style={styles.input}
-                placeholder="End Time"
-                value={endTime}
-                onChangeText={setEndTime}
-            />
+            <View style={styles.button}>
+                <Button title={"Start Time: " + startTime.toLocaleTimeString()} onPress={() => setShowStartTime(true)} style={styles.button} />
+            </View>
+            <View style={styles.button}>
+                <Button title={"End Time: " + endTime.toLocaleTimeString()} onPress={() => setShowEndTime(true)} />
+            </View>
+
+
+            {showStartTime && (<DateTimePicker
+                value={new Date()}
+                mode={'time'}
+                is24Hour={true}
+                onChange={(_, selectedDate) => {
+                    setShowStartTime(false);
+                    setStartTime(selectedDate)
+                }}
+            />)}
+
+            {showEndTime && (<DateTimePicker
+                value={new Date()}
+                mode={'time'}
+                is24Hour={true}
+                onChange={(_, selectedDate) => {
+                    setShowEndTime(false);
+                    setEndTime(selectedDate)
+                }}
+            />)}
+
             <Picker
                 style={styles.picker}
-                selectedValue={selectedVenue}
-                onValueChange={(itemValue) => setSelectedVenue(itemValue)}
+                selectedValue={selectedVenue.id}
+                onValueChange={(_, index) => setSelectedVenue(venueList[index])}
             >
-                <Picker.Item label="Select Venue" value="" />
-                {venues.map((venue) => (
-                    <Picker.Item key={venue.value} label={venue.label} value={venue.value} />
+                {venueList.map((venue) => (
+                    <Picker.Item key={venue.id} label={venue.name} value={venue.id} />
                 ))}
             </Picker>
             <Button title="Create Event" onPress={handleCreateEvent} />
@@ -110,4 +172,7 @@ const styles = StyleSheet.create({
         padding: 10,
         marginBottom: 16,
     },
+    button: {
+        marginBottom: 10,
+    }
 });

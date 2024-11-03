@@ -13,7 +13,7 @@ export default function DisplayEvent() {
         setNumEvents(parseInt(value));
         setEvents(generateEvents(parseInt(value)));
     };
-
+    // replace generate events with retrieving from database
     const generateEvents = (num) => {
         const events = [];
         for (let i = 1; i <= num; i++) {
@@ -22,8 +22,7 @@ export default function DisplayEvent() {
         return events;
     };
     const handlePressEvent = (eventId) => {
-        // Handle navigation to DisplayEventDetails page here
-        console.log('Event pressed:', eventId); // Replace with navigation logic
+        console.log('Event pressed:', eventId);
         navigation.navigate('Event Details');
     };
     return (
@@ -33,7 +32,7 @@ export default function DisplayEvent() {
                 onValueChange={handleNumEventsChange}
                 style={styles.picker}>
                 <Picker.Item label="Select Number of Events" value={0} />
-                {Array.from({ length: 100 }, (_, i) => i + 1).map((num) => (
+                {Array.from({ length: 10 }, (_, i) => i + 1).map((num) => (
                     <Picker.Item key={num} label={num.toString()} value={num} />
                 ))}
             </Picker>
@@ -43,7 +42,6 @@ export default function DisplayEvent() {
                     renderItem={({ item }) => (
                         <TouchableOpacity onPress={() => handlePressEvent(item.id)}>
                             <View style={styles.eventTile}>
-                                {/* <Image source={{ uri: item.imageUrl }} style={styles.eventImage} /> */}
                                 <Image source={imageSource} style={styles.eventImage} />
                                 <Text style={styles.eventTitle}>{item.name}</Text>
                                 <Text style={styles.eventDescription}>{item.description}</Text>

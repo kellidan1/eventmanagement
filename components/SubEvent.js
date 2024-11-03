@@ -3,6 +3,8 @@ import { View, Text, StyleSheet, TextInput, Button } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
 export default function SubEvent() {
+    const startTime = useState([]);
+    const endTime = useState([]);
     const [subEvents, setSubEvents] = useState([]);
     const navigation = useNavigation();
     const handleAddSubEvent = () => {
@@ -13,6 +15,7 @@ export default function SubEvent() {
         setSubEvents(subEvents.filter((subEvent) => subEvent.id !== index));
     };
     const handlePressEvent = () => {
+        // add insert into database logic here
         navigation.navigate('Display event');
     };
 
@@ -31,12 +34,16 @@ export default function SubEvent() {
                             setSubEvents(updatedSubEvents);
                         }}
                     />
-                    <View style={styles.buttonContainer}>
-                        <Button
-                            title="Submit"
-                            onPress={() => console.log('Submitting event:', subEvent.id)}
-                        />
-                    </View>
+                    <TextInput
+                        style={styles.subEventInput}
+                        placeholder={`Start Time`}
+                        value={subEvent.startTime}
+                    />
+                    <TextInput
+                        style={styles.subEventInput}
+                        placeholder={`End Time`}
+                        value={subEvent.endTime}
+                    />
                     <View style={styles.buttonContainer}>
                         <Button
                             title="Remove"
@@ -69,7 +76,7 @@ const styles = StyleSheet.create({
         marginBottom: 10,
     },
     subEventInput: {
-        width: '80%',
+        width: '37%',
         height: 40,
         borderWidth: 1,
         borderColor: 'gray',
