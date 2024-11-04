@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { View, StyleSheet, TextInput, Button, Image } from 'react-native';
+import { View, StyleSheet, TextInput, TouchableOpacity, Button, Image } from 'react-native';
 import SubEvent from '../components/SubEvent';
 import { useNavigation } from '@react-navigation/native';
 import { Picker } from '@react-native-picker/picker';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import * as ImagePicker from 'expo-image-picker';
 const imageSource = require('../assets/images/icon.png'); // change it so user has option to click and choose their own image
 
 export default function Event() {
@@ -20,11 +21,27 @@ export default function Event() {
         capacity: 0
     });
 
+    const [image, setImage] = useState(null);
 
     const [venueList, setVenueList] = useState([]);
     const [showStartTime, setShowStartTime] = useState(false);
     const [showEndTime, setShowEndTime] = useState(false);
 
+    const pickImage = async () => {
+        // No permissions request is necessary for launching the image library
+        let result = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ImagePicker.MediaTypeOptions.All,
+            allowsEditing: true,
+            aspect: [4, 3],
+            quality: 1,
+        });
+
+        console.log(result);
+
+        if (!result.canceled) {
+            setImage(result.assets[0].uri);
+        }
+    };
 
     // load the venues
     useEffect(() => {
@@ -75,7 +92,12 @@ export default function Event() {
 
     return (
         <View style={styles.event}>
-            <Image source={imageSource} style={styles.image} />
+
+            <TouchableOpacity onPress={pickImage}>
+                <Image source={imageSource} style={styles.image} />
+            </TouchableOpacity>
+            {/* <Button title="Pick an image from camera roll" onPress={pickImage} /> */}
+            {image && <Image source={{ uri: image }} />}
             <TextInput
                 style={styles.input}
                 placeholder="Event Name"
