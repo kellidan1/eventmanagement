@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, Button, FlatList, TouchableOpacity, Image } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { Picker } from '@react-native-picker/picker';
-
 
 const imageSource = require('../assets/images/splash.png'); // this common icon im using, remove it and add retrival from database for each venue
 
@@ -31,13 +29,13 @@ export default function Venue() {
         setVenues(generateVenues(parseInt(value)));
     };
     // replace generate venues with retrieving from database
-    const generateVenues = (num) => {
-        const venues = [];
-        for (let i = 1; i <= num; i++) {
-            venues.push({ id: i, name: `Venue ${i}`, location: `Location for Venue ${i}` });
-        }
-        return venues;
-    };
+    // const generateVenues = (num) => {
+    //     const venues = [];
+    //     for (let i = 1; i <= num; i++) {
+    //         venues.push({ id: i, name: `Venue ${i}`, location: `Location for Venue ${i}` });
+    //     }
+    //     return venues;
+    // };
 
     const handlePressVenue = (venueId) => {
         console.log('Venue pressed:', venueId);

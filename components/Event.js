@@ -19,12 +19,7 @@ export default function Event() {
         location: '',
         capacity: 0
     });
-    const handleAddSubEvent = () => {
-        setSubEvents([...subEvents, { id: subEvents.length + 1, name: '' }]);
-    };
-    const handleRemoveSubEvent = (index) => {
-        setSubEvents(subEvents.filter((subEvent) => subEvent.id !== index));
-    };
+
 
     const [venueList, setVenueList] = useState([]);
     const [showStartTime, setShowStartTime] = useState(false);

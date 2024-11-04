@@ -1,6 +1,5 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, FlatList, Image, TouchableOpacity } from 'react-native';
-import { Picker } from '@react-native-picker/picker';
 import { useNavigation } from '@react-navigation/native';
 const imageSource = require('../assets/images/icon.png');
 
@@ -9,49 +8,35 @@ export default function DisplayEvent() {
     const [events, setEvents] = useState([]);
     const navigation = useNavigation();
 
-    const handleNumEventsChange = (value) => {
-        setNumEvents(parseInt(value));
-        setEvents(generateEvents(parseInt(value)));
-    };
-    // replace generate events with retrieving from database
-    const generateEvents = (num) => {
-        const events = [];
-        for (let i = 1; i <= num; i++) {
-            events.push({ id: i, name: `Event ${i}`, description: `Description for Event ${i}` });
-        }
-        return events;
-    };
-    const handlePressEvent = (eventId) => {
-        console.log('Event pressed:', eventId);
-        navigation.navigate('Event Details');
-    };
+    useEffect(() => {
+        fetch("https://event-management-backend-974j.onrender.com/events")
+            .then((res) => res.json())
+            .then((event) => {
+                let temp = []
+                event.forEach((event) => {
+                    temp.push({ ...event, id: event._id, name: event.name })
+                })
+                console.log(temp)
+                setEvents(temp);
+            })
+            .catch(err => { console.error(err) })
+    }, [])
     return (
         <View style={styles.container}>
-            <Picker
-                selectedValue={numEvents}
-                onValueChange={handleNumEventsChange}
-                style={styles.picker}>
-                <Picker.Item label="Select Number of Events" value={0} />
-                {Array.from({ length: 10 }, (_, i) => i + 1).map((num) => (
-                    <Picker.Item key={num} label={num.toString()} value={num} />
-                ))}
-            </Picker>
-            {numEvents > 0 && (
-                <FlatList
-                    data={events}
-                    renderItem={({ item }) => (
-                        <TouchableOpacity onPress={() => handlePressEvent(item.id)}>
-                            <View style={styles.eventTile}>
-                                <Image source={imageSource} style={styles.eventImage} />
-                                <Text style={styles.eventTitle}>{item.name}</Text>
-                                <Text style={styles.eventDescription}>{item.description}</Text>
-                            </View>
-                        </TouchableOpacity>
-                    )}
-                    keyExtractor={(item) => item.id}
-                    style={styles.flatList}
-                />
-            )}
+            <FlatList
+                data={events}
+                renderItem={({ item, index }) => (
+                    <TouchableOpacity onPress={() => navigation.navigate('Event Details', { event: events[index] })}>
+                        <View style={styles.eventTile}>
+                            <Image source={imageSource} style={styles.eventImage} />
+                            <Text style={styles.eventTitle}>{item.name}</Text>
+                            <Text style={styles.eventDescription}>{item.description}</Text>
+                        </View>
+                    </TouchableOpacity>
+                )}
+                keyExtractor={(item) => item.id}
+                style={styles.flatList}
+            />
         </View>
     );
 }
@@ -63,12 +48,21 @@ const styles = StyleSheet.create({
         padding: 16,
     },
     eventTile: {
-        backgroundColor: 'blue',
+        backgroundColor: '#89CFF0',
         borderRadius: 10,
         padding: 16,
         marginBottom: 10,
         fontSize: 18,
         fontWeight: 'bold',
+    },
+    eventTitle: {
+        fontSize: 18,
+        fontWeight: 'bold',
+        color: 'black',
+    },
+    eventDescription: {
+        fontSize: 16,
+        color: 'black',
     },
     eventDescription: {
         fontSize: 14,

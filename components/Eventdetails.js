@@ -1,37 +1,36 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, Image } from 'react-native';
+import { useRoute } from '@react-navigation/native';
+export default function DisplayEventDetails({ route }) {
 
-export default function DisplayEventDetails() {
-    const event = {
-        // Replace with retrieved event data from database
-        name: 'Event Name',
-        description: 'Description of Event',
-        startTime: '10:00 AM',
-        endTime: '12:00 PM',
-        venue: 'Venue',
-        subEvents: [
-            { id: 1, name: 'Sub Event 1' },
-            { id: 2, name: 'Sub Event 2' },
-        ],
-    };
+    const { event } = route.params;
     const imageSource = require('../assets/images/favicon.png');
-
+    console.log(event);
+    //"__v": 0, "_id": "67286fe262241711ec79b829", "description": "Info", "id": "67286fe262241711ec79b829", "name": "Infofestival", "subevents": [], "timings": {"_id": "67286fe262241711ec79b82a",
+    //"endTime": "2024-11-04T06:55:13.979Z", "startTime": "2024-11-04T06:55:13.979Z"}, 
+    //"venue": {"_id": "67286fe262241711ec79b82b", "capacity": 500000, "location": "Venue location ", "name": "Venue 5"}}
 
     return (
         <View style={styles.container}>
             <Image source={imageSource} style={styles.eventImage} />
             <Text style={styles.eventTitle}>{event.name}</Text>
             <Text style={styles.eventDescription}>{event.description}</Text>
-            <Text style={styles.eventStartTime}>Start Time: {event.startTime}</Text>
-            <Text style={styles.eventEndTime}>End Time: {event.endTime}</Text>
-            <Text style={styles.eventVenue}>Venue: {event.venue}</Text>
-            <Text style={styles.eventSubEvents}>Sub Events:</Text>
-            {event.subEvents.map((subEvent) => (
-                <Text key={subEvent.id} style={styles.eventSubEvent}>
-                    - {subEvent.name}
-                </Text>
-            ))}
+            <Text style={styles.eventStartTime}>
+                Date: {new Date(event.timings.startTime).toLocaleDateString('en-GB')}
+            </Text>
+            <Text style={styles.eventStartTime}>
+                Start Time: {new Date(event.timings.startTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false })}
+            </Text>
+            <Text style={styles.eventEndTime}>
+                End Time: {new Date(event.timings.endTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false })}
+            </Text>
+
+
+            <Text style={styles.eventVenue}>Venue Name: {event.venue.name}</Text>
+            <Text style={styles.eventVenue}>Venue Location: {event.venue.location}</Text>
+            <Text style={styles.eventVenue}>Venue Capacity: {event.venue.capacity}</Text>
         </View>
+
     );
 }
 
