@@ -10,6 +10,7 @@ export default function Event() {
     const navigation = useNavigation();
     const [name, setName] = useState('');
     const [description, setDescription] = useState('');
+    const [subEvent, setSubEvent] = useState('');
     const [startTime, setStartTime] = useState(new Date());
     const [endTime, setEndTime] = useState(new Date());
     const [selectedVenue, setSelectedVenue] = useState({
@@ -18,6 +19,12 @@ export default function Event() {
         location: '',
         capacity: 0
     });
+    const handleAddSubEvent = () => {
+        setSubEvents([...subEvents, { id: subEvents.length + 1, name: '' }]);
+    };
+    const handleRemoveSubEvent = (index) => {
+        setSubEvents(subEvents.filter((subEvent) => subEvent.id !== index));
+    };
 
     const [venueList, setVenueList] = useState([]);
     const [showStartTime, setShowStartTime] = useState(false);
@@ -44,7 +51,7 @@ export default function Event() {
 
     const handleCreateEvent = () => {
         console.log('Creating event:', name, description, startTime, endTime); //replace this with inserting into database logic
-        navigation.navigate('Sub Events')
+        navigation.navigate('Event Management App')
 
 
         fetch("https://event-management-backend-974j.onrender.com/event", {
@@ -64,7 +71,7 @@ export default function Event() {
                     location: selectedVenue.location,
                     capacity: selectedVenue.capacity
                 },
-                subevents: []
+                subEvent
             })
         })
             .then(res => { console.log(res); navigation.navigate('Event Management App') })
@@ -85,6 +92,12 @@ export default function Event() {
                 placeholder="Event Description"
                 value={description}
                 onChangeText={setDescription}
+            />
+            <TextInput
+                style={styles.input}
+                placeholder="Sub Event Name"
+                value={subEvent}
+                onChangeText={setSubEvent}
             />
             <View style={styles.button}>
                 <Button title={"Start Time: " + startTime.toLocaleTimeString()} onPress={() => setShowStartTime(true)} style={styles.button} />
@@ -174,5 +187,5 @@ const styles = StyleSheet.create({
     },
     button: {
         marginBottom: 10,
-    }
+    },
 });
