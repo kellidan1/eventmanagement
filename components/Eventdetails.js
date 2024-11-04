@@ -6,9 +6,6 @@ export default function DisplayEventDetails({ route }) {
     const { event } = route.params;
     const imageSource = require('../assets/images/favicon.png');
     console.log(event);
-    //"__v": 0, "_id": "67286fe262241711ec79b829", "description": "Info", "id": "67286fe262241711ec79b829", "name": "Infofestival", "subevents": [], "timings": {"_id": "67286fe262241711ec79b82a",
-    //"endTime": "2024-11-04T06:55:13.979Z", "startTime": "2024-11-04T06:55:13.979Z"}, 
-    //"venue": {"_id": "67286fe262241711ec79b82b", "capacity": 500000, "location": "Venue location ", "name": "Venue 5"}}
 
     return (
         <View style={styles.container}>

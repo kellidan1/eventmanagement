@@ -15,7 +15,7 @@ export default function Venue() {
             .then((venues) => {
                 let temp = []
                 venues.forEach((venue) => {
-                    temp.push({ id: venue._id, name: venue.name })
+                    temp.push({ ...venue, id: venue._id, name: venue.name })
                 })
                 console.log(temp)
                 setVenues(temp);
@@ -23,32 +23,14 @@ export default function Venue() {
             .catch(err => { console.error(err) })
     }, [])
 
-
-    const handleNumVenuesChange = (value) => {
-        setNumVenues(parseInt(value));
-        setVenues(generateVenues(parseInt(value)));
-    };
-    // replace generate venues with retrieving from database
-    // const generateVenues = (num) => {
-    //     const venues = [];
-    //     for (let i = 1; i <= num; i++) {
-    //         venues.push({ id: i, name: `Venue ${i}`, location: `Location for Venue ${i}` });
-    //     }
-    //     return venues;
-    // };
-
-    const handlePressVenue = (venueId) => {
-        console.log('Venue pressed:', venueId);
-        navigation.navigate('Venue Details'); // Replace with your retriving the specific venue from database
-    };
-
     return (
         <View style={styles.container}>
             <Button title="+" style={styles.addButton} onPress={() => navigation.navigate('Add Venue')} />
             <FlatList
                 data={venues}
-                renderItem={({ item }) => (
-                    <TouchableOpacity onPress={() => handlePressVenue(item.id)}>
+                renderItem={({ item, index }) => (
+                    <TouchableOpacity onPress={() => navigation.navigate('Venue Info', { venue: item })}>
+
                         <View style={styles.venueTile}>
                             <Image source={imageSource} style={styles.venueImage} />
                             <Text style={styles.venueTitle}>{item.name}</Text>

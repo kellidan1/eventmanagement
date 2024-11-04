@@ -8,6 +8,7 @@ import DisplayEvent from '../components/Displayevent';
 import EventDetails from '../components/Eventdetails';
 import Venue from '../components/Venue';
 import AddVenue from '../components/Addvenue';
+import VenueDetails from '../components/Venuedetails';
 
 const Stack = createStackNavigator();
 
@@ -22,6 +23,7 @@ export default function App() {
         <Stack.Screen name="Event Details" component={EventDetails} />
         <Stack.Screen name="Venue Details" component={Venue} />
         <Stack.Screen name="Add Venue" component={AddVenue} />
+        <Stack.Screen name="Venue Info" component={VenueDetails} />
       </Stack.Navigator>
     </NavigationContainer>
   );
